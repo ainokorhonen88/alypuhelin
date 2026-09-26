@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function Brand(){return <Link href="/" className="brand" aria-label="Älypuhelin, etusivu"><svg viewBox="0 0 108 108" aria-hidden="true"><path d="M48 22C30 22 18 34 18 50s12 28 30 28h12l20 13V67c7-6 10-13 10-21 0-15-12-24-28-24Z" fill="currentColor"/><circle cx="43" cy="47" r="5" fill="var(--citron)"/><circle cx="64" cy="47" r="5" fill="var(--citron)"/></svg><span>älypuhelin</span></Link>}

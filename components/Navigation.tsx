@@ -1,76 +1,11 @@
-"use client";
-
-import { useState } from "react";
-import Link from "next/link";
-
-export default function Navigation() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  return (
-    <nav className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="text-2xl">📱</span>
-          <span className="text-xl font-bold text-gray-900">
-            Äly<span className="text-primary-600">puhelin</span>
-          </span>
-        </Link>
-        <div className="hidden sm:flex items-center gap-6 text-sm">
-          <Link href="/#gurut" className="text-gray-600 hover:text-primary-600 transition-colors">
-            Gurut
-          </Link>
-          <Link href="/#miten-toimii" className="text-gray-600 hover:text-primary-600 transition-colors">
-            Miten toimii
-          </Link>
-          <Link href="/#hinta" className="text-gray-600 hover:text-primary-600 transition-colors">
-            Hinta
-          </Link>
-          <Link href="/vittuilupuhelin" className="text-gray-600 hover:text-primary-600 transition-colors">
-            Vittuilupuhelin
-          </Link>
-          <a
-            href="tel:0600411104"
-            className="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
-          >
-            📞 Soita nyt
-          </a>
-        </div>
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="sm:hidden p-2 text-gray-600"
-          aria-label="Valikko"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {mobileOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
-      </div>
-      {mobileOpen && (
-        <div className="sm:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3">
-          <Link href="/#gurut" onClick={() => setMobileOpen(false)} className="block text-gray-700 hover:text-primary-600">
-            Gurut
-          </Link>
-          <Link href="/#miten-toimii" onClick={() => setMobileOpen(false)} className="block text-gray-700 hover:text-primary-600">
-            Miten toimii
-          </Link>
-          <Link href="/#hinta" onClick={() => setMobileOpen(false)} className="block text-gray-700 hover:text-primary-600">
-            Hinta
-          </Link>
-          <Link href="/vittuilupuhelin" onClick={() => setMobileOpen(false)} className="block text-gray-700 hover:text-primary-600">
-            Vittuilupuhelin
-          </Link>
-          <a
-            href="tel:0600411104"
-            className="block bg-primary-600 text-white text-center font-semibold px-4 py-3 rounded-lg"
-          >
-            📞 0600 411 104
-          </a>
-        </div>
-      )}
-    </nav>
-  );
+'use client';
+import {useEffect,useRef,useState} from 'react';
+import Link from 'next/link';
+import Brand from './Brand';
+import Icon from './Icon';
+const links = [['/#gurut','Löydä oma Guru'],['/#miten-toimii','Näin se toimii'],['/#hinta','Hinnat'],['/#ukk','Kysyttävää?']];
+export default function Navigation(){
+ const [open,setOpen]=useState(false);const button=useRef<HTMLButtonElement>(null);
+ useEffect(()=>{const close=(e:KeyboardEvent)=>{if(e.key==='Escape'){setOpen(false);button.current?.focus();}};if(open)window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close)},[open]);
+ return <header className="header"><div className="container nav-wrap"><Brand/><nav aria-label="Päävalikko" className="desktop-nav">{links.slice(1).map(([href,label])=><Link key={href} href={href}>{label}</Link>)}<Link href="/#gurut" className="button button-small">Löydä oma Guru<Icon name="arrow"/></Link></nav><button ref={button} className="menu-toggle" aria-expanded={open} aria-controls="mobile-menu" aria-label={open?'Sulje valikko':'Avaa valikko'} onClick={()=>setOpen(!open)}><span>{open?'Sulje':'Valikko'}</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8">{open?<path d="m6 6 12 12M18 6 6 18"/>:<path d="M4 8h16M4 16h16"/>}</svg></button></div><nav id="mobile-menu" aria-label="Mobiilivalikko" className="mobile-nav" hidden={!open}>{links.map(([href,label])=><Link key={href} href={href} onClick={()=>setOpen(false)}>{label}<Icon name="arrow"/></Link>)}</nav></header>
 }
